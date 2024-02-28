@@ -1,0 +1,80 @@
+body {
+  background-color: powderblue;
+  transition: margin-left .5s;
+}
+
+.App.sidebar-open {
+  margin-left: 200px;
+  transition: margin-left .8s;
+}
+
+header {
+  background-color: white;
+  color: #322785;
+  padding: 10px 0;
+  position: relative;
+  width: 100%;
+  top: 0;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.dashboard-button {
+  margin-left: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #253D7B;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.dashboard-button:hover{
+  font-size: 21px;
+  background-color: white;
+  color: #322785;
+  padding: 10px 15px;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+header h1 {
+  margin: 0;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.sidebar {
+  position: fixed;
+  width: 200px;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: black;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  transition: border-radius .5s;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 60px;
+}
+
+.sidebar li {
+  padding: 10px;
+  cursor: pointer;
+  color: white;
+  transition: color 0.5s, padding-right 1s;
+}
+
+.sidebar li:hover {
+  font-size: 120%;
+  color: #322785;
+  padding-right: 5px;
+  position: relative;
+  transition: 0.5s;
+}
