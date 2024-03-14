@@ -4,6 +4,10 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import stationData from './stations.json';
 import { Icon } from 'leaflet';
 import axios from 'axios';
+import Marquee from "react-fast-marquee";
+import image from './cmrltrain.gif';
+import img1 from './govt.jpg';
+import img2 from './tnlogo.png'
 
 const customIcon = new Icon({
   iconUrl: '/location.png',
@@ -41,13 +45,20 @@ const App = () => {
 
   return (
     <div>
-      <h1 style={{ textAlign: 'center' }}>Chennai Metro Rail Limited</h1>
+      <img src={img1} alt="some example image" style={{width:'125px',height:'125px'}}/>
+      <img src={img2} alt="some example image" style={{width:'125px',height:'125px',position: 'absolute',
+    top: 0,right: 0}}/>
+      <h1 style={{ textAlign: 'center',color:'blue' }}>Chennai Metro Rail Limited</h1>
       <div style={{ textAlign: 'left' }}>
         <button onClick={() => handleLinkClick('Home')}>Home</button>
         <button onClick={() => handleLinkClick('Passenger Flow')}>Passenger Flow</button>
         <button onClick={() => handleLinkClick('Management Summary')}>Management Summary</button>
       </div>
       <h3>{page === 'Home' ? 'Welcome Admin!' : page}</h3>
+      <center><img src={image} alt="some example image" /></center>
+      <Marquee speed={200}>
+      <h3>🚅 This project is made by our interns Monish, Karthik, Arul, Dinesh, Vijay 🚅</h3>
+      </Marquee>
       {page !== 'Home' && (
         <div>
           <label>
@@ -108,7 +119,6 @@ const App = () => {
         </div>
       )}
     </div>
-  );  
+  ); 
 };
-
 export default App;
