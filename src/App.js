@@ -16,6 +16,9 @@ const App = () => {
   const [endDate, setEndDate] = useState('');
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedStation, setSelectedStation] = useState(null); 
+  const [selectedData, setSelectedData] = useState(null);
+  const [graphImage, setGraphImage] = useState(null);
 
   const handleLinkClick = (linkName) => {
     setPage(linkName);
@@ -39,6 +42,28 @@ const App = () => {
       });
   };
 
+  const handleSelectChange = (event) => {
+    const selected = data.find(item => item.Name === event.target.value);
+    setSelectedData(selected);
+  };
+
+  const handleGenerateGraph = () => {
+    axios.get(`http://localhost:8000/myapp/generate-graph/?data=${encodeURIComponent(JSON.stringify(selectedData))}`)
+      .then(response => {
+        // Get the base64 string from the response
+        const graphImage = response.data.graph;
+
+        // Convert the base64 string to a data URL
+        const graphImageURL = `data:image/png;base64,${graphImage}`;
+
+        setGraphImage(graphImageURL);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+};
+
+  
   return (
     <div>
       <h1 style={{ textAlign: 'center' }}>Chennai Metro Rail Limited</h1>
@@ -68,8 +93,16 @@ const App = () => {
                 />
                 {Object.keys(stationData).map((line) =>
                   stationData[line].map((station) => (
-                    <Marker position={station.coordinates} icon={customIcon}>
-                      <Popup>
+                    <Marker 
+                      position={station.coordinates} 
+                      icon={customIcon} 
+                      eventHandlers={{
+                        click: () => {
+                          setSelectedStation(station);
+                        },
+                      }}
+                    >
+                    <Popup>
                         {station.idline}<br></br>
                         {station.name}
                       </Popup>
@@ -83,28 +116,36 @@ const App = () => {
                 <div>Loading Data...</div>
               ) : (
                 data.length > 0 && (
-                  <table>
-                    <thead>
-                      <tr>
-                        {Object.keys(data[0]).map((key) => (
-                          <th key={key}>{key}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
+                  <div>
+                    <select onChange={handleSelectChange}>
                       {data.map((item, index) => (
-                        <tr key={index}>
-                          {Object.values(item).map((value, i) => (
-                            <td key={i}>{value}</td>
-                          ))}
-                        </tr>
+                        <option key={index} value={item.Name}>{item.Name}</option>
                       ))}
-                    </tbody>
-                  </table>
+                    </select>
+                    {selectedData && (
+                      <div>
+                        <p>Line ID: {selectedData['Line Id']}</p>
+                        <p>Name: {selectedData.Name}</p>
+                        <p>Dates: {selectedData.dates}</p>
+                        <p>AFC Revenue (A): {selectedData['AFC Revenue (A)']}</p>
+                        {/* New button to generate the graph */}
+                        <button onClick={handleGenerateGraph}>Generate Graph</button>
+                        {/* New image element to display the graph */}
+                        {graphImage && <img src={graphImage} alt="Revenue Graph" />}
+                      </div>
+                    )}
+                  </div>
                 )
               )}
             </div>
           </div>
+          {selectedStation && (
+            <div>
+              <h2>Selected Station Info:</h2>
+              <p>Name: {selectedStation.name}</p>
+              <p>ID Line: {selectedStation.idline}</p>
+            </div>
+          )}
         </div>
       )}
     </div>
